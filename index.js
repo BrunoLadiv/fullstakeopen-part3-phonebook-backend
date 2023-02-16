@@ -60,13 +60,14 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  console.log(body)
 
-  
-
-  if (!body.name && !body.number) {
+  if (!body.name || !body.number) {
     return response.status(400).json({
-      error: 'content missing',
+      error: 'Content missing, provide a Name and a Number',
+    })
+  } else if (persons.find((person) => person.name === body.name)) {
+    return response.status(400).json({
+      error: `${body.name} is already in the phonebook, please provide a unique name`,
     })
   }
 
