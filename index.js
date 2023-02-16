@@ -24,6 +24,19 @@ const persons = [
   },
 ]
 
+function getDate() {
+  return new Date()
+}
+
+app.get('/info', (request, response) => {
+  const date = getDate()
+
+  response.send(
+    `<h2>Phonebook has info for ${persons.length} people</h2>
+     <p>${date}</p>`
+  )
+})
+
 app.get('/', (request, response) => {
   response.send('<h1>Part3 phonebook backend</h1>')
 })
