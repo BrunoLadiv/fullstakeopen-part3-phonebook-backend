@@ -1,6 +1,9 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
+
 const app = express()
+app.use(cors())
 app.use(morgan('combined'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -95,7 +98,7 @@ const generateId = () => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
