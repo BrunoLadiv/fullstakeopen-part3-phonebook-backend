@@ -15,28 +15,16 @@ app.use((req, res, next) => {
   console.log(req.body)
   next()
 })
-// let persons = [
-//   {
-//     id: 1,
-//     name: 'Arto Hellas',
-//     number: '040-123456',
-//   },
-//   {
-//     id: 2,
-//     name: 'Ada Lovelace',
-//     number: '39-44-5323523',
-//   },
-//   {
-//     id: 3,
-//     name: 'Dan Abramov',
-//     number: '12-43-234345',
-//   },
-//   {
-//     id: 4,
-//     name: 'Mary Poppendieck',
-//     number: '39-23-6423122',
-//   },
-// ]
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 function getDate() {
   return new Date()
@@ -68,6 +56,21 @@ app.delete('/api/persons/:id', (request, response, next) => {
   console.log(request.params.id)
   Person.findByIdAndRemove(request.params.id)
     .then(() => response.status(204).end())
+    .catch((error) => next(error))
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  const contact = {
+    name: body.name,
+    number: body.number,
+  }
+
+  Person.findByIdAndUpdate(request.params.id, contact, { new: true })
+    .then((updatedPerson) => {
+      response.json(updatedPerson)
+    })
     .catch((error) => next(error))
 })
 
