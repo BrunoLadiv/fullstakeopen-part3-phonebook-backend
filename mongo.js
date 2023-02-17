@@ -8,7 +8,7 @@ if (process.argv.length < 3) {
 const password = process.argv[2]
 
 const url = `mongodb+srv://brunokasprik:${password}@phonebook-database.rka43iw.mongodb.net/?retryWrites=true&w=majority`
-mongoose.set('strictQuery', false)
+
 mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({
