@@ -71,29 +71,31 @@ app.get('/api/persons/:id', (request, response, next) => {
 //   response.status(204).end()
 // })
 
-// app.post('/api/persons', (request, response) => {
-//   const body = request.body
+app.post('/api/persons', (request, response) => {
+  const body = request.body
 
-//   if (!body.name || !body.number) {
-//     return response.status(400).json({
-//       error: 'Content missing, provide a Name and a Number',
-//     })
-//   } else if (persons.find((person) => person.name === body.name)) {
-//     return response.status(400).json({
-//       error: `${body.name} is already in the phonebook, please provide a unique name`,
-//     })
-//   }
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: 'Content missing, provide a Name and a Number',
+    }) //FIXME: frontend "error" notification not working when name or number isn't provided
+  }
 
-//   const person = {
-//     name: body.name,
-//     number: body.number,
+  const newPerson = new Person({
+    name: body.name,
+    number: body.number,
+  })
 
-//   }
-
-//   persons = [...persons, person]
-
-//   response.json(person)
-// })
+  newPerson
+    .save()
+    .then((savedPerson) => {
+      response.json(savedPerson)
+    })
+    .catch((error) => {
+      response.status(400).json({
+        error: error.message,
+      })
+    })
+})
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
