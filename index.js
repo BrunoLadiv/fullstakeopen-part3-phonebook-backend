@@ -50,7 +50,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
-  const {name, number}= request.body
+  const { name, number }= request.body
 
   const contact = {
     name,
